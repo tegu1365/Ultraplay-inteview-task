@@ -1,10 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ultraplay_task.Models
 {
     public class Match
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
         [Required]
         public int Id { get; set; }
 
@@ -18,7 +20,6 @@ namespace ultraplay_task.Models
         [Required]
         [EnumDataType(typeof(MatchType))]
         public MatchType MatchType { get; set; }
-
         public ICollection<Bet> Bets { get; set; }
         public Event Event { get; set; }
     }

@@ -25,10 +25,7 @@ namespace ultraplay_task.Migrations
             modelBuilder.Entity("ultraplay_task.Models.Bet", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("IsLive")
                         .HasColumnType("bit");
@@ -50,10 +47,7 @@ namespace ultraplay_task.Migrations
             modelBuilder.Entity("ultraplay_task.Models.Event", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("CategoryID")
                         .HasColumnType("int");
@@ -78,10 +72,7 @@ namespace ultraplay_task.Migrations
             modelBuilder.Entity("ultraplay_task.Models.Match", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("EventId")
                         .HasColumnType("int");
@@ -106,10 +97,7 @@ namespace ultraplay_task.Migrations
             modelBuilder.Entity("ultraplay_task.Models.Odd", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("BetId")
                         .HasColumnType("int");
@@ -134,10 +122,7 @@ namespace ultraplay_task.Migrations
             modelBuilder.Entity("ultraplay_task.Models.Sport", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
                         .IsRequired()
