@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.Serialization;
 
 namespace ultraplay_task.Models
 {
@@ -15,7 +16,6 @@ namespace ultraplay_task.Models
 
         [Required]
         public bool IsLive { get; set; }
-
         public ICollection<Odd> Odds { get; set; }
         public Match Match { get; set; }
     }

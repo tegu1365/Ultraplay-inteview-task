@@ -1,4 +1,5 @@
-﻿using ultraplay_task.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using ultraplay_task.Models;
 
 namespace ultraplay_task.Services.SportService
 {
@@ -13,7 +14,8 @@ namespace ultraplay_task.Services.SportService
 
         public List<Sport> All()
         {
-            return _context.Sports.ToList();
+            return _context.Sports.Include(_ => _.Events).ThenInclude(_ => _.Matches)
+                .ThenInclude(_ => _.Bets).ThenInclude(_ => _.Odds).ToList();
         }
 
         public Sport Create(Sport sport)

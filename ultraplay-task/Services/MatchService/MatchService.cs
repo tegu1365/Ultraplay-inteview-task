@@ -1,4 +1,4 @@
-﻿using System.Security.Cryptography;
+﻿using Microsoft.EntityFrameworkCore;
 using ultraplay_task.Models;
 
 namespace ultraplay_task.Services.MatchService
@@ -14,7 +14,7 @@ namespace ultraplay_task.Services.MatchService
 
         public List<Match> All()
         {
-            return _context.Matches.ToList();
+            return _context.Matches.Include(_ => _.Bets).ThenInclude(_=>_.Odds).ToList();
         }
 
         public Match Create(Match match)
@@ -34,15 +34,14 @@ namespace ultraplay_task.Services.MatchService
 
         public Match Get(int id)
         {
-            return _context.Matches.Where(x => x.Id == id)
+            return _context.Matches.Include(_ => _.Bets).ThenInclude(_ => _.Odds).Where(x => x.Id == id)
             .FirstOrDefault();
         }
 
         public Match Update(Match match)
         {
-            Models.Match matchToUpdate = _context.Matches
-                                        .Where(x => x.Id == match.Id)
-                                        .FirstOrDefault();
+            Models.Match matchToUpdate = _context.Matches.Where(x => x.Id == match.Id)
+                .FirstOrDefault();
 
             matchToUpdate = match;
 

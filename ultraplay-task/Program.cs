@@ -6,11 +6,14 @@ using ultraplay_task.Services.MatchService;
 using ultraplay_task.Services.OddService;
 using ultraplay_task.Services.SportService;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+);
 
 builder.Services.AddDbContext<UltraplayTaskDbContext>();
 

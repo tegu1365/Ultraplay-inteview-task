@@ -1,4 +1,5 @@
-﻿using ultraplay_task.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using ultraplay_task.Models;
 
 namespace ultraplay_task.Services.OddService
 {
@@ -13,7 +14,7 @@ namespace ultraplay_task.Services.OddService
 
         public List<Odd> All()
         {
-            return _context.Odds.ToList();
+            return  _context.Odds.ToList();
         }
 
         public Odd Create(Odd odd)
@@ -25,7 +26,7 @@ namespace ultraplay_task.Services.OddService
 
         public Odd Delete(int id)
         {
-            Models.Odd odd = _context.Odds.FirstOrDefault(x => x.Id == id);
+            Models.Odd odd =  _context.Odds.FirstOrDefault(x => x.Id == id);
             _context.Odds.Remove(odd);
             _context.SaveChanges();
             return odd;
@@ -33,15 +34,13 @@ namespace ultraplay_task.Services.OddService
 
         public Odd Get(int id)
         {
-            return _context.Odds.Where(x => x.Id == id)
-             .FirstOrDefault();
+            return _context.Odds.Where(x => x.Id == id).FirstOrDefault();
         }
 
         public Odd Update(Odd odd)
         {
-            Models.Odd oddToUpdate = _context.Odds
-                                        .Where(x => x.Id == odd.Id)
-                                        .FirstOrDefault();
+            Models.Odd oddToUpdate = _context.Odds.Where(x => x.Id == odd.Id)
+                .FirstOrDefault();
 
             oddToUpdate = odd;
 

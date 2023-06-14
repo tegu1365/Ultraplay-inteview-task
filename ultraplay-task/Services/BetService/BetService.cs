@@ -1,4 +1,5 @@
-﻿using ultraplay_task.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using ultraplay_task.Models;
 
 namespace ultraplay_task.Services.BetService
 {
@@ -12,7 +13,7 @@ namespace ultraplay_task.Services.BetService
         }
         public List<Bet> All()
         {
-            return _context.Bets.ToList();
+            return  _context.Bets.Include(_ => _.Odds).ToList();
         }
 
         public Bet Create(Bet bet)

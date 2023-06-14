@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.Serialization;
 
 namespace ultraplay_task.Models
 {
@@ -10,9 +11,9 @@ namespace ultraplay_task.Models
         [Required]
         public int Id { get; set; }
         [Required]
-        public string Name { get; set; }
+       public string Name { get; set; }
         [Required]
-        public bool IsLive { get; set; }
+       public bool IsLive { get; set; }
         [Required]
         public int CategoryID { get; set; }
         public ICollection<Match> Matches { get; set; }
