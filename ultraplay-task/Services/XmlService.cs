@@ -150,6 +150,7 @@ namespace ultraplay_task.Services
             if (existingMatch == null)
             {
                 existingMatch= _matchService.Create(match1);
+                AddUpdateMessageForChange(match.Id, "Match");
             }
             else
             {
@@ -188,6 +189,8 @@ namespace ultraplay_task.Services
             if (existingBet == null)
             {
                 existingBet=_betService.Create(bet1);
+                AddUpdateMessageForChange(bet.Id, "Bet");
+
             }
             foreach (var odd in bet.Odds)
             {
@@ -209,6 +212,7 @@ namespace ultraplay_task.Services
             if (existingOdd == null)
             {
                 existingOdd=_oddService.Create(odd1);
+                AddUpdateMessageForChange(odd.Id, "Odd");
             }
             else
             {
