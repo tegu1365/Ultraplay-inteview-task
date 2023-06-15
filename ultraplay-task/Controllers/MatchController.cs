@@ -40,7 +40,7 @@ namespace ultraplay_task.Controllers
         public  ActionResult<Match> GetMatch(int id)
         {
             //Note: The feed returns only currently active matches, markets and odds.
-            //I'm not sure how to fillter the two groups of markets if I have only active ones.
+            //I'm not sure how to fillter the two groups of markets if I have only active ones and this goes for the hide updates.
             return matchService.Get(id);
         }
     }

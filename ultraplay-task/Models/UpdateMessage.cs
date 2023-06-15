@@ -10,7 +10,9 @@ namespace ultraplay_task.Models
         [Required]
         public UpdateType Type { get; set; }
         [Required]
-        public object Item { get; set; }
+        public string item { get; set; }
+        [Required]
+        public int itemID { get; set; }
     }
 
     public enum UpdateType

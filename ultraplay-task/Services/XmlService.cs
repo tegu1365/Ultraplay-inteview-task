@@ -11,6 +11,7 @@ using ultraplay_task.Services.OddService;
 using ultraplay_task.Services.SportService;
 using Microsoft.Extensions.Logging;
 using System.Text.RegularExpressions;
+using ultraplay_task.Services.UpdateService;
 
 namespace ultraplay_task.Services
 {
@@ -25,7 +26,8 @@ namespace ultraplay_task.Services
         private  IEventService _eventService;
         private  IMatchService _matchService;
         private  IBetService _betService;
-        private  IOddService _oddService;
+        private IOddService _oddService;
+        private IUpdateService _updateService;
 
         public XmlService(IServiceScopeFactory serviceScopeFactory)
         {
@@ -34,6 +36,11 @@ namespace ultraplay_task.Services
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            //When ran for a first since it has to go throught the whole file adding all the data it
+            //doesnt have the necessery time for the DB context and because of this the context is occupied when its
+            //supposed to be used by the next thread.
+            //The issue was found too late in the process and I to fix it I would needed to rewrite nearly the whole of this Service
+            //so it can use the implemented async methods.
             _timer = new Timer(ReadXmlFeed, null, TimeSpan.Zero, TimeSpan.FromSeconds(60));
 
             return Task.CompletedTask;
@@ -48,7 +55,7 @@ namespace ultraplay_task.Services
                 _matchService = scope.ServiceProvider.GetRequiredService<IMatchService>();
                 _betService = scope.ServiceProvider.GetRequiredService<IBetService>();
                 _oddService = scope.ServiceProvider.GetRequiredService<IOddService>();
-
+                _updateService = scope.ServiceProvider.GetRequiredService<IUpdateService>();
 
                 try
                 {
@@ -97,18 +104,17 @@ namespace ultraplay_task.Services
 
             if (existingSport == null)
             {
-                existingSport=_sportService.Create(sport1);
+                existingSport= _sportService.Create(sport1);
             }
             foreach (var evnt in sport.Events) 
             {
-               
-                AddEvent(evnt,sport.Id);
+                 AddEvent(evnt,sport.Id);
             }
         }
 
-        private void AddEvent(XMLEvent evnt,int sportId)
+        private  void AddEvent(XMLEvent evnt,int sportId)
         {
-            var existingEvent = _eventService.Get(evnt.Id);
+            var existingEvent =_eventService.Get(evnt.Id);
             Event evnt1 = new Event();
             evnt1.Id = evnt.Id;
             evnt1.Name = evnt.Name;
@@ -120,7 +126,7 @@ namespace ultraplay_task.Services
 
             if (existingEvent == null)
             {
-                existingEvent=_eventService.Create(evnt1);
+                existingEvent =  _eventService.Create(evnt1);
             }
             foreach (var match in evnt.Matches)
             {
@@ -143,7 +149,7 @@ namespace ultraplay_task.Services
 
             if (existingMatch == null)
             {
-                existingMatch=_matchService.Create(match1);
+                existingMatch= _matchService.Create(match1);
             }
             else
             {
@@ -151,11 +157,14 @@ namespace ultraplay_task.Services
                 {
                     existingMatch.StartDate = match1.StartDate;
                     _matchService.Update(existingMatch);
+                    AddUpdateMessageForChange(match.Id, "Match");
+
                 }
-                if(match1.MatchType != existingMatch.MatchType)
+                if (match1.MatchType != existingMatch.MatchType)
                 {
                     existingMatch.MatchType = match1.MatchType;
                     _matchService.Update(existingMatch);
+                    AddUpdateMessageForChange(match.Id, "Match");
                 }
             }
             foreach (var bet in match.Bets)
@@ -172,7 +181,7 @@ namespace ultraplay_task.Services
             bet1.Id=bet.Id;
             bet1.Name=bet.Name;
             bet1.IsLive = bet.IsLive;
-            bet1.Match = _matchService.Get(matchId);
+            bet1.Match =_matchService.Get(matchId);
             bet1.Odds = new List<Odd>();
 
 
@@ -207,9 +216,19 @@ namespace ultraplay_task.Services
                 {
                     existingOdd.Value = odd1.Value;
                     _oddService.Update(existingOdd);
+                    AddUpdateMessageForChange(odd.Id, "Odd");
                 }
             }
             
+        }
+
+        private void AddUpdateMessageForChange(int id, string item)
+        {
+            UpdateMessage update = new UpdateMessage();
+            update.item = item;
+            update.itemID = id;
+            update.Type = UpdateType.Change;
+            _updateService.Create(update);
         }
 
         private Models.MatchType getMatchType(string matchType)

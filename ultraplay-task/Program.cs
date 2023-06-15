@@ -5,7 +5,7 @@ using ultraplay_task.Services.EventService;
 using ultraplay_task.Services.MatchService;
 using ultraplay_task.Services.OddService;
 using ultraplay_task.Services.SportService;
-
+using ultraplay_task.Services.UpdateService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,13 +15,15 @@ builder.Services.AddControllers().AddNewtonsoftJson(options =>
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
 );
 
-builder.Services.AddDbContext<UltraplayTaskDbContext>();
+builder.Services.AddDbContext<UltraplayTaskDbContext>(ServiceLifetime.Scoped);
 
 builder.Services.AddScoped<ISportService, SportService>();
 builder.Services.AddScoped<IEventService, EventService>();
 builder.Services.AddScoped<IMatchService, MatchService>();
 builder.Services.AddScoped<IBetService, BetService>();
 builder.Services.AddScoped<IOddService, OddService>();
+builder.Services.AddScoped<IUpdateService, UpdateService>();
+
 builder.Services.AddHostedService<XmlService>();
 
 
