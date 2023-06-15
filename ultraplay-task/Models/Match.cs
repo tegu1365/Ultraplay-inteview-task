@@ -23,6 +23,7 @@ namespace ultraplay_task.Models
         public MatchType MatchType { get; set; }
         public ICollection<Bet> Bets { get; set; }
         public Event Event { get; set; }
+
     }
 
     public enum MatchType

@@ -18,5 +18,6 @@ namespace ultraplay_task.Models
         public int CategoryID { get; set; }
         public ICollection<Match> Matches { get; set; }
         public Sport Sport { get; set; }
+
     }
 }

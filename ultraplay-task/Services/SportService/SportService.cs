@@ -35,7 +35,8 @@ namespace ultraplay_task.Services.SportService
 
         public Sport Get(int id)
         {
-            return _context.Sports.Where(x => x.Id == id)
+            return _context.Sports.Include(_ => _.Events).ThenInclude(_ => _.Matches)
+                .ThenInclude(_ => _.Bets).ThenInclude(_ => _.Odds).Where(x => x.Id == id)
               .FirstOrDefault();
         }
 

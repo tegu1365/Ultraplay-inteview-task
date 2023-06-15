@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
 using ultraplay_task.Models;
 
 namespace ultraplay_task.Services.EventService
@@ -14,7 +15,8 @@ namespace ultraplay_task.Services.EventService
 
         public List<Event> All()
         {
-            return _context.Events.ToList();
+            return _context.Events.Include(_ => _.Matches).ThenInclude(_ => _.Bets)
+                .ThenInclude(_ => _.Odds).ToList();
         }
 
         public Event Create(Event _event)
@@ -34,7 +36,8 @@ namespace ultraplay_task.Services.EventService
 
         public Event Get(int id)
         {
-            return _context.Events.Where(x => x.Id == id)
+            return _context.Events.Include(_ => _.Matches).ThenInclude(_ => _.Bets)
+                .ThenInclude(_ => _.Odds).Where(x => x.Id == id)
               .FirstOrDefault();
         }
 

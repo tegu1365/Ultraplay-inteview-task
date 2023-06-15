@@ -12,5 +12,6 @@ namespace ultraplay_task.Models
         [Required]
         public string Name { get; set; }
         public ICollection<Event> Events { get; set; }
+
     }
 }

@@ -16,5 +16,6 @@ namespace ultraplay_task.Models
         public double Value { get; set; }
         public double SpecialBetValue { get; set; }
         public Bet Bet { get; set; }
+
     }
 }

@@ -16,6 +16,8 @@ namespace ultraplay_task.Services
 {
     public class XmlService : BackgroundService
     {
+        string xmlFeedUrl = "https://sports.ultraplay.net/sportsxml?clientKey=9C5E796D-4D54-42FD-A535-D7E77906541A&sportId=2357&days=7";
+
         private Timer _timer;
 
         private readonly IServiceScopeFactory _serviceScopeFactory;
@@ -41,7 +43,6 @@ namespace ultraplay_task.Services
         {
             using (var scope = _serviceScopeFactory.CreateScope())
             {
-                string xmlFeedUrl = "https://sports.ultraplay.net/sportsxml?clientKey=9C5E796D-4D54-42FD-A535-D7E77906541A&sportId=2357&days=7";
                 _sportService = scope.ServiceProvider.GetRequiredService<ISportService>();
                 _eventService = scope.ServiceProvider.GetRequiredService<IEventService>();
                 _matchService = scope.ServiceProvider.GetRequiredService<IMatchService>();
@@ -96,10 +97,8 @@ namespace ultraplay_task.Services
 
             if (existingSport == null)
             {
-                
-                _sportService.Create(sport1);                
+                existingSport=_sportService.Create(sport1);
             }
-
             foreach (var evnt in sport.Events) 
             {
                
@@ -118,9 +117,10 @@ namespace ultraplay_task.Services
             evnt1.CategoryID = evnt.CategoryID;
             evnt1.Matches = new List<Models.Match>();
 
+
             if (existingEvent == null)
             {
-                _eventService.Create(evnt1);
+                existingEvent=_eventService.Create(evnt1);
             }
             foreach (var match in evnt.Matches)
             {
@@ -140,9 +140,10 @@ namespace ultraplay_task.Services
             match1.Event = _eventService.Get(eventId);
             match1.Bets = new List<Bet>();
 
+
             if (existingMatch == null)
             {
-                _matchService.Create(match1);
+                existingMatch=_matchService.Create(match1);
             }
             else
             {
@@ -174,11 +175,11 @@ namespace ultraplay_task.Services
             bet1.Match = _matchService.Get(matchId);
             bet1.Odds = new List<Odd>();
 
+
             if (existingBet == null)
             {
-                _betService.Create(bet1);
+                existingBet=_betService.Create(bet1);
             }
-
             foreach (var odd in bet.Odds)
             {
 
@@ -198,7 +199,7 @@ namespace ultraplay_task.Services
 
             if (existingOdd == null)
             {
-                _oddService.Create(odd1);
+                existingOdd=_oddService.Create(odd1);
             }
             else
             {
@@ -208,6 +209,7 @@ namespace ultraplay_task.Services
                     _oddService.Update(existingOdd);
                 }
             }
+            
         }
 
         private Models.MatchType getMatchType(string matchType)
